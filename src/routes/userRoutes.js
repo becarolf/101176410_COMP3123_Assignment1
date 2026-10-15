@@ -9,10 +9,12 @@ const {
   validate,
 } = require("../validators/userValidator");
 
+const authLimiter = require("../middleware/rateLimiter");
+
 // signup
-router.post("/signup", signupValidation, validate, signup);
+router.post("/signup", authLimiter, signupValidation, validate, signup);
 
 // user login
-router.post("/login", loginValidation, validate, login);
+router.post("/login", authLimiter, loginValidation, validate, login);
 
 module.exports = router;

@@ -4,6 +4,7 @@ const express = require("express");
 const helmet = require("helmet");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
+const errorMiddleware = require("./middleware/errorMiddleware");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,16 @@ app.get("/health", (req, res) => {
     message: "Employee Management API is running",
   });
 });
+
+// handle routes that do not exist
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Route not found",
+  });
+});
+
+// handle application errors
+app.use(errorMiddleware);
 
 // start application
 const startServer = async () => {
