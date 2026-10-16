@@ -1,6 +1,12 @@
+const logger = require("../utils/logger");
+
 const errorMiddleware = (err, req, res, next) => {
-  // log the error in the terminal
-  console.error(err.message);
+  // log the error without exposing passwords or tokens
+  logger.error("Application error", {
+    method: req.method,
+    path: req.path,
+    errorType: err.name,
+  });
 
   // handle invalid JSON
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
