@@ -7,6 +7,8 @@ const {
   createEmployee,
   getAllEmployees,
   getEmployeeById,
+  updateEmployee,
+  deleteEmployee,
 } = require("../controllers/employeeController");
 
 const {
@@ -21,5 +23,17 @@ router.get("/employees/:eid", getEmployeeById); // get a specific employee by ID
 
 // validate employee data before creating
 router.post("/employees", employeeValidation, validateEmployee, createEmployee);
+
+// update an employee by ID
+router.put(
+  "/employees/:eid",
+  employeeValidation,
+  validateEmployee,
+  updateEmployee
+);
+
+// delete an employee using the query parameter
+router.delete("/employees", deleteEmployee);
+
 
 module.exports = router;
