@@ -12,6 +12,16 @@ Users can register, log in, and manage their own employee records. The API uses 
 
 Each employee belongs to a specific user, so users cannot access, update, or delete employees created by someone else.
 
+## Live API (Vercel)
+
+The Employee Management API is deployed on Vercel and connected to MongoDB Atlas.
+
+**Base URL:** https://101176410-comp-3123-assignment1.vercel.app
+
+**Health Check:** https://101176410-comp-3123-assignment1.vercel.app/health
+
+The API can be tested using Postman by replacing `http://localhost:3000` with the deployed Base URL. Protected endpoints require a JWT token obtained through the login endpoint.
+
 ## Technologies Used
 
 - Node.js
