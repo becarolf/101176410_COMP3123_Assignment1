@@ -15,6 +15,17 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(requestLogger);
 app.use(express.json());
+
+// make sure MongoDB is connected before accessing the API
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use("/api/v1/user", userRoutes); // User routes
 app.use("/api/v1/emp", employeeRoutes); // Employee routes
 
@@ -31,18 +42,27 @@ app.use((req, res) => {
   res.status(404).json({
     message: "Route not found",
   });
-})
+});
 
 // handle application errors
 app.use(errorMiddleware);
 
-// start application
-const startServer = async () => {
-  await connectDB();
+// export the Express app for Vercel
+module.exports = app;
 
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-};
+// start the server locally
+if (!process.env.VERCEL) {
+  const startServer = async () => {
+    try {
+      await connectDB();
 
-startServer();
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    } catch (error) {
+      console.error("Failed to start server:", error.message);
+    }
+  };
+
+  startServer();
+}

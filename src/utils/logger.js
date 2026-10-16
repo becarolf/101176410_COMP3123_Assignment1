@@ -10,16 +10,22 @@ const logger = winston.createLogger({
   ),
 
   transports: [
-    // save errors in a separate file
-    new winston.transports.File({
-      filename: "logs/error.log",
-      level: "error",
-    }),
+    // show logs in the Vercel console
+    new winston.transports.Console(),
 
-    // save all application logs
-    new winston.transports.File({
-      filename: "logs/combined.log",
-    }),
+    // save logs in files when running locally
+    ...(!process.env.VERCEL
+      ? [
+          new winston.transports.File({
+            filename: "logs/error.log",
+            level: "error",
+          }),
+
+          new winston.transports.File({
+            filename: "logs/combined.log",
+          }),
+        ]
+      : []),
   ],
 });
 
